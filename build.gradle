@@ -1,0 +1,46 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+	id 'org.springframework.boot' version '2.7.9'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.6.21'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('solaceSpringBootVersion', "1.2.2")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+	implementation 'com.solace.spring.boot:solace-spring-boot-starter'
+	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+	implementation 'org.springframework.integration:spring-integration-jms:6.0.3'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "com.solace.spring.boot:solace-spring-boot-bom:${solaceSpringBootVersion}"
+	}
+}
+
+tasks.withType(KotlinCompile) {
+	kotlinOptions {
+		freeCompilerArgs = ['-Xjsr305=strict']
+		jvmTarget = '17'
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
