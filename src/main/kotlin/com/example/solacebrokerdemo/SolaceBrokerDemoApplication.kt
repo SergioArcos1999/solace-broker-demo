@@ -8,11 +8,15 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableScheduling
 class SolaceBrokerDemoApplication {
 	companion object Globals {
-		//A single queue with 1 producer & 2 consumers
-		var isNonExclusiveExample = true
+		//EXAMPLE 1: A single queue with 1 producer & 2 consumers
+		const val isNonExclusiveExample = true
 
-		//A queue for each consumer + locking
-		var isLeaderElectionExample = false
+		//EXAMPLE 2: A queue for each consumer + locking following leader election pattern
+		const val isLeaderElectionExample = false
+
+		//Generic modifiers:
+		const val publishRate: Long = 5000
+		const val initialDelay: Long = 5000
 	}
 }
 
