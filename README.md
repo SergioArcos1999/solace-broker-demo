@@ -70,6 +70,8 @@ PUBLISHER 1 ==> PUBLISHED: Message 4
 CONSUMER 2 ==> RECEIVED: Message 4
 ...
 ```
+![img_5.png](img_5.png)
+
 - **isLeaderElectionExample:** This one will enable the demo where we simulate **multiple queues subscribed to the same topic, each queue receiving the same message. We will have a single publisher and two consumers, each consumer listening from a different queue**. In addition we have implemented a **leader election pattern** using locks to organize the access to the queues. **PROBLEM:** As you will see in the example, this approach doesn't solve the duplication (or triplication, quadruplication, ... depending on the number of replicas of our app) that we have in the queues, as all of them will have the same messages. With the locking mechanism we organize when each replica reads from its queue, but not the contents of that queue, unfortunately processing each message twice (in this case is twice, but the message will be processed as many times as replicas/queues we have).
 ```
 Output example:
@@ -83,9 +85,12 @@ CONSUMER 2 ==> RECEIVED: Message 1
 CONSUMER 2 ==> Lock unlocked
 ...
 ```
+
 In that example you can clearly see how the lock mechanism works. We're even able to see that at some time CONSUMER 2 tried to take the lock, but was being used by CONSUMER 1 so it waits until the lock is unlocked to proceed with the consumption.
 
 Also, as we mentioned, this pattern doesn't solve the reprocessing of messages problem, as each queue will have the same messages, we're only controlling when each consumer accesses its queue.
+
+![img_6.png](img_6.png)
 
 #### Tweak some generic modifiers
 - **publishRate:** Rate at which the publisher (or publishers) throw a message to the queue(s).
